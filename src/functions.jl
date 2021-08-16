@@ -13,7 +13,7 @@ function f_pairs(R)
     return F
 end
 
-function betadisper(X,factors, metric = Euclidean, n_perm = 1000)
+function betadisper(X,factors, metric = Euclidean, median = true, n_perm = 1000)
     X = metric == Euclidean ? X : transform(fit(MDS,pairwise(metric(),X,X,dims = 1), distances = true))'
     levels = unique(factors)
     n = length(levels)
@@ -21,7 +21,7 @@ function betadisper(X,factors, metric = Euclidean, n_perm = 1000)
     residuals = []
     for level in levels
         x = X[factors .== level,:]
-        c = mean(x,dims = 1)
+        c = meadian == true ? DirectionalStatistics.geometric_median(x) : mean(x,dims = 1)
         r = pairwise(Euclidean(),x, c,dims = 1) .^2
         push!(centroids,c)
         push!(residuals,r)
