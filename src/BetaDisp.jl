@@ -1,5 +1,7 @@
 module BetaDisp
 
-# Write your package code here.
+using Distances, MultivariateStats,  Random
+include "functions.jl"
 
+export betadisper
 end
