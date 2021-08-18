@@ -1,4 +1,4 @@
-using BetaDisp, Distances, StatsFuns
+using BetaDisp, Distances, StatsBase
 using Test
 
 @testset "BetaDisp.jl" begin
