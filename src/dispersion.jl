@@ -24,16 +24,15 @@ function spatialMed(vectors, group, pos)
     return (spMedPos,spMedNeg )
 end
 
-function dispersion(X,group, metric = Euclidean)
+function dispersion(D,group)
     """
-    Quantify the dispersion around the group spatial median for each group in X, according to the given distance metric.
-    See Distances.jl for list of available metrics and the process of implementic your own metric. Once X is converted 
-    to a distance matrix, it is then transformed by principal coordinate analysis before medians and distances are calculated.
+    Quantify the dispersion around the group spatial median for each group in distance/dissimilarity matrix D
+    D is first transformed by principal coordinate analysis before medians and distances are calculated.
     The algorithm is based on Anderson (2006). But we aim to be consistent with the betadisper implementation in the
     R package Vegan, which has implemented some changes since the original paper was published.
     
     The function accepts:
-        X: Array a numeric where each row is an observations
+        D: A dissimiarity or distance matrix
         group: A vector containing group labels
         metric: A distance/dissimilarity measure implemented in Distances.jl
     
@@ -49,7 +48,7 @@ function dispersion(X,group, metric = Euclidean)
     Anderson, M.J. (2006) Distance-based tests for homogeneity of multivariate dispersions. Biometrics 62(1), 245--253.
     https://github.com/vegandevs/vegan/blob/master/R/betadisper.R
     """
-    D = Distances.pairwise(metric(),X,X,dims = 1)
+    
     levels = unique(group)
     # vegdist objects contain lower triangular matrices wheras D is symmetric
     # thus we skip a D + D' step here.
@@ -76,4 +75,34 @@ function dispersion(X,group, metric = Euclidean)
     F_pairs = f_pairs(residuals)
     means = NamedArray(mean.(residuals),string.(levels),"group")
     return (F = F, pairwise_F = F_pairs, medians = medians, residuals = residuals, means = means,group = group,levels = levels)
+end
+
+
+function dispersion(X,group, metric)
+    """
+        Quantify the dispersion around the group spatial median for each group in X, according to the given distance metric.
+        See Distances.jl for list of available metrics and the process of implementic your own metric. Once X is converted 
+        to a distance matrix, it is then transformed by principal coordinate analysis before medians and distances are calculated.
+        The algorithm is based on Anderson (2006). But we aim to be consistent with the betadisper implementation in the
+        R package Vegan, which has implemented some changes since the original paper was published.
+        
+        The function accepts:
+            X: A numerical array
+            group: A vector containing group labels
+            metric: A distance/dissimilarity measure implemented in Distances.jl
+        
+        This function returns a named tuple containing:
+            F = Global F-Statistic 
+            pairwise_F = pairwise F-statistics
+            medians = spatial (aka geometric) median of each group in the transformed coordinates
+            residuals = vector containing each observations distance from its group median
+            means = vector containing the means distance to median for each group
+            group = the original grouping vector
+            levels = unique items from 'group'
+        
+        Anderson, M.J. (2006) Distance-based tests for homogeneity of multivariate dispersions. Biometrics 62(1), 245--253.
+        https://github.com/vegandevs/vegan/blob/master/R/betadisper.R
+    """
+    D = Distances.pairwise(metric(),X,X,dims = 1)
+    return dispersion(D,group)
 end

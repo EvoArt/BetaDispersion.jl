@@ -21,6 +21,7 @@ function permutest(disp,n_perm = 1000)
     F = disp.F
     R = disp.residuals
     F_pairs = disp.pairwise_F
+    group = disp.group
     levels = disp.levels
     level_names = string.(levels)
     inds = [group .== level for level in levels]
@@ -30,7 +31,7 @@ function permutest(disp,n_perm = 1000)
     r = vcat(R...)
     X = vcat(R...)
     N = length(X)
-    nj = length.(R)
+    nj = Tuple(length.(R))
     X̅ = mean(X)
     k = length(R)
     N_p,nj_p,X̅_p = get_pars(R)
