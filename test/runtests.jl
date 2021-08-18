@@ -1,5 +1,6 @@
 using BetaDisp
-using Test
+using Test, RCall
+R"library(vegan)"
 
 @testset "BetaDisp.jl" begin
     # Write your tests here.

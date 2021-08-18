@@ -1,7 +1,9 @@
 module BetaDisp
 
-using Distances, MultivariateStats,  Random, DirectionalStatistics
-include("functions.jl")
+using LinearAlgebra,  Random, DirectionalStatistics, NamedArrays
+include("src\\ANOVA.jl")
+include("src\\dispersion.jl")
+include("src\\permutest.jl")
 
-export betadisper
+export dispersion, permutest
 end
