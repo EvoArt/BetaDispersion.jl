@@ -1,7 +1,7 @@
 using BetaDisp, Distances, StatsBase,BenchmarkTools
 using Test
 
-@testset "BetaDisp.jl" begin
+#@testset "BetaDisp.jl" begin
     x = rand(1000,50)
     d = dispersion(x,rand(1:5,1000),BrayCurtis)
     bench = @benchmark dispersion(x,rand(1:5,1000), BrayCurtis)
@@ -48,4 +48,4 @@ using Test
         @test dispersion(x,rand(1:5,1000), distfun)
     end
 
-end
+#end
