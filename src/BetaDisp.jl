@@ -1,6 +1,6 @@
 module BetaDisp
 
-using LinearAlgebra,  Random, DirectionalStatistics, NamedArrays
+using LinearAlgebra,  Random, DirectionalStatistics, NamedArrays, Distances
 include("ANOVA.jl")
 include("dispersion.jl")
 include("permutest.jl")
