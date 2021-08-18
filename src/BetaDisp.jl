@@ -1,9 +1,9 @@
 module BetaDisp
 
 using LinearAlgebra,  Random, DirectionalStatistics, NamedArrays
-include("src\\ANOVA.jl")
-include("src\\dispersion.jl")
-include("src\\permutest.jl")
+include("ANOVA.jl")
+include("dispersion.jl")
+include("permutest.jl")
 
 export dispersion, permutest
 end
