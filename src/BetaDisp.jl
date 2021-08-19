@@ -1,6 +1,6 @@
 module BetaDisp
 
-using LinearAlgebra,  Random, DirectionalStatistics, NamedArrays, Distances, RequiresTuring
+using LinearAlgebra,  Random, DirectionalStatistics, NamedArrays, Distances, Requires,Turing
 import StatsBase: mean
 include("ANOVA.jl")
 include("dispersion.jl")

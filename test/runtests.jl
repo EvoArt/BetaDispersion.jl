@@ -2,11 +2,12 @@ using BetaDisp, Distances, StatsBase,BenchmarkTools
 using Test
 
 #@testset "BetaDisp.jl" begin
-    x = rand(1000,50)
-    d = dispersion(x,rand(1:5,1000),BrayCurtis)
-    bench = @benchmark dispersion(x,rand(1:5,1000), BrayCurtis)
-    @test mean(bench.times) .< 0.1
-    bench = @benchmark permutest(d)
+    x = rand(100,50)
+    y =rand(1:5,100)
+    d = dispersion(x,y,BrayCurtis)
+    bench = @benchmark dispersion($x,$y, BrayCurtis)
+    @test mean(bench.times) .< 1
+    bench = @benchmark permutest($d)
     @test mean(bench.times) .< 1
     
    distfuns =  [Euclidean,
@@ -45,7 +46,7 @@ using Test
     NormRMSDeviation,
     Bregman]
     for distfun in distfuns
-        @test dispersion(x,rand(1:5,1000), distfun)
+        @test dispersion(x,rand(1:5,100), distfun)
     end
 
 #end
