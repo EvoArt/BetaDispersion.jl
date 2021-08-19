@@ -26,8 +26,9 @@ end
 
 function dispersion(D,group)
     """
-    Quantify the dispersion around the group spatial median for each group in distance/dissimilarity matrix D
-    D is first transformed by principal coordinate analysis before medians and distances are calculated.
+    Quantify the dispersion around the group spatial median for each group in D, according to the given distance metric.
+    See Distances.jl for list of available metrics and the process of implementic your own metric. Once X is converted 
+    to a distance matrix, it is then transformed by principal coordinate analysis before medians and distances are calculated.
     The algorithm is based on Anderson (2006). But we aim to be consistent with the betadisper implementation in the
     R package Vegan, which has implemented some changes since the original paper was published.
     
@@ -48,7 +49,6 @@ function dispersion(D,group)
     Anderson, M.J. (2006) Distance-based tests for homogeneity of multivariate dispersions. Biometrics 62(1), 245--253.
     https://github.com/vegandevs/vegan/blob/master/R/betadisper.R
     """
-    
     levels = unique(group)
     # vegdist objects contain lower triangular matrices wheras D is symmetric
     # thus we skip a D + D' step here.
@@ -78,7 +78,7 @@ function dispersion(D,group)
 end
 
 
-function dispersion(X,group, metric)
+function dispersion(X,group, metric )
     """
         Quantify the dispersion around the group spatial median for each group in X, according to the given distance metric.
         See Distances.jl for list of available metrics and the process of implementic your own metric. Once X is converted 
