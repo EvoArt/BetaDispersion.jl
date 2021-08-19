@@ -61,7 +61,7 @@ function dispersion(D,group)
     # We ommit this step in keeping with vegan.betadisper
     vectors = vectors * diagm(sqrt.(abs.(eig))) 
     # record indices corresponding to postitive eigenvalues
-    pos = real(eig) .> 0.0 
+    pos = real.(eig) .> 0.0 
     medians = spatialMed(vectors, group, pos)
     # calculate distances (to median) for "pos" and "neg" vectors separately. in orer to 
     # subtract "neg" from "pos". See Anderson (2006) for details.
