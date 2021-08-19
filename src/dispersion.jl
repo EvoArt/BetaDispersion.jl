@@ -70,7 +70,7 @@ function dispersion(D,group)
     # Where dis_neg > dis_pos, set residual = 0 by taking only the real part 
     # of the square root of a negative. This was implemented in vegan.betadisper after discussion in
     # issue #306. But this is not done in Anderson (2006)
-    residuals = [(Real.(sqrt.(Complex.(dis_pos[i] .- dis_neg[i]))) )   for i in 1:length(dis_pos)] 
+    residuals = [(real.(sqrt.(Complex.(dis_pos[i] .- dis_neg[i]))) )   for i in 1:length(dis_pos)] 
     F = f(residuals)
     F_pairs = f_pairs(residuals)
     means = NamedArray(mean.(residuals),string.(levels),"group")
