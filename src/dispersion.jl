@@ -1,3 +1,14 @@
+# structs
+
+struct Disp
+    F ::Float64
+    pairwise_F ::Array{Float64} 
+    medians ::Tuple
+    residuals ::Vector{Matrix{Float64}} 
+    means ::Vector{Float64}
+    group  ::Vector
+    levels  ::Vector
+end
 #Helper functions
 
 # calculate distances from medians
@@ -74,7 +85,7 @@ function dispersion(D,group)
     F = f(residuals)
     F_pairs = f_pairs(residuals)
     means = NamedArray(mean.(residuals),string.(levels),"group")
-    return (F = F, pairwise_F = F_pairs, medians = medians, residuals = residuals, means = means,group = group,levels = levels)
+    return Disp(F, F_pairs, medians, residuals, means,group, levels)
 end
 
 

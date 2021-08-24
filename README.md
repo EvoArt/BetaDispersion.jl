@@ -37,7 +37,4 @@ chns = bayesdist(disp)
 plot(chns)
 ```
 
-## Known issues
 
-This package is primarily focussed on situations where the distances are non-Euclidean. The dispersion 
-function can fail when provided with a Euclidean distance matrix. We will implement an alternative method for Euclidean distance matrices that skips the PCO transformation.

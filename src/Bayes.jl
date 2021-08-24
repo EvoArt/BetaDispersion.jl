@@ -1,4 +1,5 @@
 
+using Turing
     @model function BayesDisp(R,μ_scale = 1)
         k = length(R)      
         μ ~ filldist(Normal(0,μ_scale),k)

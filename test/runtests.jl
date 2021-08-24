@@ -5,6 +5,8 @@ using Test
     x = rand(100,50)
     y =rand(1:5,100)
     d = dispersion(x,y,Euclidean)
+    permutest(d)
+    
     bench = @benchmark dispersion($x,$y, BrayCurtis)
     @test mean(bench.times) .< 2
     bench = @benchmark permutest($d)
@@ -44,7 +46,7 @@ using Test
     NormRMSDeviation,
     Bregman]
     for distfun in distfuns
-         @test typeof(dispersion(x,rand(1:5,100), distfun)) <: NamedTuple
+         @test typeof(dispersion(x,rand(1:5,100), distfun)) <: Disp
     end
 
 #end
