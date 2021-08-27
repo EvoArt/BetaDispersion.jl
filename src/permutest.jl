@@ -47,6 +47,17 @@ function permutest(disp,n_perm = 1000)
         perm[p] =f(rs,N,nj,X̅,k)
         perm_pairs[:,:,p] = f_pairs(rs,N_p,nj_p,X̅_p)
     end
+    ppairs = NamedArray(zeros(a,a),( g,g ), ("group","group"))
+    tpairs = NamedArray(zeros(a,a),( g,g ), ("group","group"))
+    Threads.@threads for i in 1:a-1
+        for j in i+1:a
+            boolmask = (group .== g[i]) .| (group .== g[j])
+            d = D[boolmask,boolmask]
+            fstat,pstat =permutest(d,group[boolmask], n_perm)
+            ppairs[j,i] = pstat
+            tpairs[j,i] = sqrt(fstat)
+        end
+    end
     # calculate P-values and return P and F values
     P = sum(perm .> F)/n_perm
     P_pairs = NamedArray(LowerTriangular(sum(perm_pairs .> F_pairs, dims = 3)[:,:,1]/n_perm),( level_names,level_names), ("group","group"))
