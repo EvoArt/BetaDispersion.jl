@@ -7,8 +7,8 @@ using Test
     d = dispersion(x,y,Euclidean)
     dispersion(x,y, metric = true)
     bench = @benchmark dispersion($x,$y, BrayCurtis)
-    @test mean(bench.times) < 1*10^9
-    bench = @benchmark permutest($d)
     @test mean(bench.times) < 2*10^9
+    bench = @benchmark permutest($d)
+    @test mean(bench.times) < 4*10^9
     
 end
