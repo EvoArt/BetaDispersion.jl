@@ -1,16 +1,16 @@
-using BetaDisp
+using BetaDispersion
 using Documenter
 
-DocMeta.setdocmeta!(BetaDisp, :DocTestSetup, :(using BetaDisp); recursive=true)
+DocMeta.setdocmeta!(BetaDispersion, :DocTestSetup, :(using BetaDispersion); recursive=true)
 
 makedocs(;
-    modules=[BetaDisp],
+    modules=[BetaDispersion],
     authors="Arthur Newbury",
-    repo="https://github.com/EvoArt/BetaDisp.jl/blob/{commit}{path}#{line}",
-    sitename="BetaDisp.jl",
+    repo="https://github.com/EvoArt/BetaDispersion.jl/blob/{commit}{path}#{line}",
+    sitename="BetaDispersion.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://EvoArt.github.io/BetaDisp.jl",
+        canonical="https://EvoArt.github.io/BetaDispersion.jl",
         assets=String[],
     ),
     pages=[
@@ -19,5 +19,5 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/EvoArt/BetaDisp.jl",
+    repo="github.com/EvoArt/BetaDispersion.jl",
 )
