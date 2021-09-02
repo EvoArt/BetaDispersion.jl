@@ -1,14 +1,14 @@
 ```@meta
-CurrentModule = BetaDisp
+CurrentModule = BetaDispersion
 ```
 
-# BetaDisp
+# BetaDispersion
 
-Documentation for [BetaDisp](https://github.com/EvoArt/BetaDisp.jl).
+Documentation for [BetaDispersion](https://github.com/EvoArt/BetaDispersion.jl).
 
 ```@index
 ```
 
 ```@autodocs
-Modules = [BetaDisp]
+Modules = [BetaDispersion]
 ```
