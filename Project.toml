@@ -1,10 +1,10 @@
-name = "BetaDisp"
-uuid = "7713d48a-e16c-416e-80cb-3757ad005515"
+name = "BetaDispersion"
+uuid = "203aa2a0-0be6-11ec-2d81-e1345fdb5ee1"
 authors = ["Arthur Newbury"]
 version = "0.1.0"
 
 [deps]
-BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
+
 DirectionalStatistics = "e814f24e-44b0-11e9-2fd5-aba2b6113d95"
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
@@ -15,12 +15,14 @@ StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 
 [compat]
-Requires = "1"
 julia = "1.6"
+Requires = "1"
+Turing = "0.18"
+
 
 [extras]
 RCall = "6f49c342-dc21-5d91-9882-a32aef131414"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 [targets]
-test = ["Test", "RCall"]
+test = ["Test", "RCall","BenchmarkTools"]
