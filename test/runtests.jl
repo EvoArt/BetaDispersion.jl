@@ -1,4 +1,4 @@
-using BetaDisp, Distances, StatsBase,BenchmarkTools
+using BetaDispersion, Distances, StatsBase,BenchmarkTools
 using Test
 
 @testset "BetaDisp.jl" begin

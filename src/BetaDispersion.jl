@@ -1,4 +1,4 @@
-module BetaDisp
+module BetaDispersion
 
 using LinearAlgebra,  Random, DirectionalStatistics, NamedArrays, Distances, Requires
 import StatsBase: mean
