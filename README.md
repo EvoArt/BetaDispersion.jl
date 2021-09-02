@@ -26,7 +26,7 @@ Additionally, If [Turing.jl](https://turing.ml/stable/) is loaded before BetaDis
 
 ```julia
 using Turing, StatsPlots
-using Distances, BetaDisp
+using Distances, BetaDispersion
 x = rand(30,5)
 g = rand(1:2,30)
 d = dispersion(x,g,BrayCurtis)
