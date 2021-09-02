@@ -56,7 +56,7 @@ jobs:
           julia --project=docs -e '
             using Documenter: DocMeta, doctest
             using BetaDispersion
-            DocMeta.setdocmeta!(BetaDisp, :DocTestSetup, :(using BetaDispersion); recursive=true)
+            DocMeta.setdocmeta!(BetaDispersion, :DocTestSetup, :(using BetaDispersion); recursive=true)
             doctest(BetaDispersion)'
       - run: julia --project=docs docs/make.jl
         env:
