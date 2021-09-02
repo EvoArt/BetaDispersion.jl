@@ -9,7 +9,7 @@ This is a small package aimed at providing equivalent functionality to `betadisp
 
 <img src="https://github.com/EvoArt/BetaDisp.jl/blob/master/docs/disp.svg">
 
-Two functions are exported, `dispersion` takes either an array, a vector containing group identities and a distance function type from `Distances.jl`, or a distance matrix a and the grouping vector. This returns a named tuple containing:
+Two functions are exported, `dispersion` takes either an array, a vector containing group identities and a distance function type from `Distances.jl`, or a distance matrix a and the grouping vector. Alternatively, if working with Euclidean distances, pass in the original data (where each row is an observation) instead of a distance matrix and set the key work argument `metric = true`. This function returns a `Disp` struct containing:
 *    `F` = Global F-Statistic 
 *    `pairwise_F` = pairwise F-statistics
 *    `medians` = spatial (aka geometric) median of each group in the transformed coordinates
@@ -24,7 +24,7 @@ Two functions are exported, `dispersion` takes either an array, a vector contain
  *   `F` = Global F-Statistic 
  *   `pairwise_F` = pairwise F-statistics
 
-Additionally, If [Turing.jl](https://turing.ml/stable/) is loaded before BetaDisp you can call `bayesdisp` on the named tuple returned by `dispersion` to perform Bayesian inference to estimate mean and standard deviation of the residuals of each group. By default 4 chains are run simultaneously using the No U-turns (NUTS) sampler for 1000 iterations each. The function returns the Markov chains along with diagnostics, more details can be found [here](https://turinglang.github.io/MCMCChains.jl/dev/). Check the [source code](https://github.com/EvoArt/BetaDisp.jl/blob/master/src/Bayes.jl) to see the function arguments. If fine control over model implementation is required, the user is urged to construct their model directly in Turing.jl.
+Additionally, If [Turing.jl](https://turing.ml/stable/) is loaded before BetaDisp you can call `bayesdisp` on the `Disp` returned by `dispersion` to perform Bayesian inference to estimate mean and standard deviation of the residuals of each group. By default 4 chains are run simultaneously using the No U-turns (NUTS) sampler for 1000 iterations each. The function returns the Markov chains along with diagnostics, more details can be found [here](https://turinglang.github.io/MCMCChains.jl/dev/). Check the [source code](https://github.com/EvoArt/BetaDisp.jl/blob/master/src/Bayes.jl) to see the function arguments. If fine control over model implementation is required, the user is urged to construct their model directly in Turing.jl.
 
 ## Example usage
 
