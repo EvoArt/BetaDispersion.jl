@@ -1,7 +1,7 @@
 using BetaDispersion, Distances, StatsBase,BenchmarkTools
 using Test
 
-@testset "BetaDisp.jl" begin
+@testset "BetaDispersion.jl" begin
     x = rand(1000,50) 
     y =rand(1:10,1000)
     d = dispersion(x,y,Euclidean)
