@@ -65,7 +65,7 @@ function dispersion(D,group)
     # thus we skip a D + D' step here.
     # We double center the matrix as in vegan.betadisper. Though this is not identical Anderson (2006).
     A = dblcen(D .^2 ) 
-    e = eigen(-A/2)
+    e = eigen(Hermitian(-A/2))
     vectors = e.vectors
     eig = e.values 
     # Anderson (2006) multiplies eigen vectors corresponding to negative eigen values by sqrt(-1).
