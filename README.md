@@ -9,7 +9,7 @@ This is a small package aimed at providing equivalent functionality to `betadisp
 
 <img src="https://github.com/EvoArt/BetaDisp.jl/blob/master/docs/disp.svg">
 
-Two functions are exported, `dispersion` takes either an array, a vector containing group identities and a distance function type from `Distances.jl`, or a distance matrix a and the grouping vector. Alternatively, if working with Euclidean distances, pass in the original data (where each row is an observation) instead of a distance matrix and set the key work argument `metric = true`. This function returns a `Disp` struct containing:
+Two functions are exported, `dispersion` takes either a data array (where each row is an observation), a vector containing group identities and a distance function type from `Distances.jl`, or a distance matrix and the grouping vector. Alternatively, if working with Euclidean distances, pass in the original data (where each row is an observation) instead of a distance matrix and set the key work argument `metric = true`. This function returns a `Disp` struct containing:
 *    `F` = Global F-Statistic 
 *    `pairwise_F` = pairwise F-statistics
 *    `medians` = spatial (aka geometric) median of each group in the transformed coordinates
@@ -30,13 +30,14 @@ Additionally, If [Turing.jl](https://turing.ml/stable/) is loaded before BetaDis
 
 ```julia
 using Turing, StatsPlots
-using Distance, BetaDisp
-x = rand(9,5)
-g = rand(1:2,9)
+using Distances, BetaDisp
+x = rand(30,5)
+g = rand(1:2,30)
 d = dispersion(x,g,BrayCurtis)
 p = permutest(d)
-chns = bayesdist(disp)
+chns = bayesdisp(d)
 plot(chns)
 ```
+<img src="https://github.com/EvoArt/BetaDisp.jl/blob/master/docs/example.png">
 
 

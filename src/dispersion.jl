@@ -125,7 +125,7 @@ function dispersion(X,group, distance)
         https://github.com/vegandevs/vegan/blob/master/R/betadisper.R
     """
 
-    D = Distances.pairwise(distance(),X,X,dims = 1)
+    D = Distances.pairwise(distance(),X,dims = 1)
     return dispersion(D,group)
   
 

@@ -2,7 +2,7 @@
 using Turing
     @model function BayesDisp(R,μ_scale = 1)
         k = length(R)      
-        μ ~ filldist(Normal(0,μ_scale),k)
+        μ ~ filldist(truncated(Normal(0,μ_scale),0,Inf),k)
         σ ~ filldist(Exponential(1),k)
         for i in 1:k
             R[i] .~ Normal(μ[i],σ[i])
