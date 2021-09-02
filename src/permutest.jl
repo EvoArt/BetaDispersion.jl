@@ -1,5 +1,5 @@
 
-function permutest(disp,n_perm = 1000)
+function permutest(disp ::Disp,n_perm = 10000)
     """
     This function permutes the residuals returned by 'dispersion' to provide global and pairwise
     P-values. Currently, no corrections are made for multiple testing. MultipleTesting.jl provides
@@ -34,25 +34,51 @@ function permutest(disp,n_perm = 1000)
     nj = Tuple(length.(R))
     X̅ = mean(X)
     k = length(R)
-    N_p,nj_p,X̅_p = get_pars(R)
-
     # generate empty containers for F values
-    perm = Vector{Float64}(undef,n_perm)
-    perm_pairs = Array{Float64}(undef,n,n,n_perm)
-    
+    perm = Vector{Float64}(undef,n_perm)    
     # run permutation
     for p in 1:n_perm
         shuffle!(r)
         rs = [view(r,inds[i]) for i in 1:n]
         perm[p] =f(rs,N,nj,X̅,k)
-        perm_pairs[:,:,p] = f_pairs(rs,N_p,nj_p,X̅_p)
+    end
+    ppairs =zeros(k,k)
+
+    Threads.@threads for i in 1:k-1
+        for j in i+1:k
+            r_1 = r[group .== levels[i]]
+            r_2 = r[group .== levels[j]]
+            pstat =permutest(r_1,r_2, F_pairs[j,i],n_perm)
+            ppairs[j,i] = pstat
+        end
     end
     # calculate P-values and return P and F values
     P = sum(perm .> F)/n_perm
-    P_pairs = NamedArray(LowerTriangular(sum(perm_pairs .> F_pairs, dims = 3)[:,:,1]/n_perm),( level_names,level_names), ("group","group"))
+    P_pairs = NamedArray(ppairs,( level_names,level_names), ("group","group"))
     F_pairs = NamedArray(LowerTriangular(F_pairs),( level_names,level_names ), ("group","group"))
     
     return (P =P,pairwise_P = P_pairs,F = F, pairwise_F =F_pairs)
+end
+
+function permutest(r_1,r_2 ,F,n_perm = 1000)
+    r = vcat(r_1,r_2)  
+    nj = (length(r_1),length(r_2))
+    n = 2
+    N = sum(nj)
+    # pre-calculate values for ANOVA function
+    X̅ = mean(r)
+    k = 2
+    inds = (1:nj[1],1:nj[2])
+    # generate empty containers for F values
+    perm = Vector{Float64}(undef,n_perm) 
+    # run permutation
+    for p in 1:n_perm
+        shuffle!(r)
+        rs = [view(r,inds[i]) for i in 1:n]
+        perm[p] =f(rs,N,nj,X̅,k)
+    end  
+    P = sum(perm .> F)/n_perm
+    return P
 end
 
 

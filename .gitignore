@@ -1,5 +1,7 @@
 *.jl.*.cov
 *.jl.cov
 *.jl.mem
+/test/timings.jl
+/test/profiling.jl
 /Manifest.toml
 /docs/build/

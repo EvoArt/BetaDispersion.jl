@@ -30,7 +30,7 @@ function f_pairs(R)
     end
     return F
 end
-function f_pairs(R,N,nj,X̅) 
+function f_pairs(R ::Vector,N ::Array{Int},nj ::Matrix{Tuple},X̅ ::Matrix{Float64}) 
     n = length(R)
     F = zeros(n,n)
     for j in 1:n-1
