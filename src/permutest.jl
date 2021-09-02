@@ -1,5 +1,5 @@
 
-function permutest(disp ::Disp,n_perm = 1000)
+function permutest(disp ::Disp,n_perm = 10000)
     """
     This function permutes the residuals returned by 'dispersion' to provide global and pairwise
     P-values. Currently, no corrections are made for multiple testing. MultipleTesting.jl provides
