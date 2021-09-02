@@ -34,8 +34,12 @@ function spatialMed(vectors, group, pos)
 
     return (spMedPos,spMedNeg )
 end
+function spatialMed(vectors, group)
 
-function dispersion(D,group)
+    return [spatial_median(vectors[group .== g,:]) for g in unique(group)]
+end
+
+function dispersion(D,group;metric = false)
     """
     Quantify the dispersion around the group spatial median for each group in D, according to the given distance metric.
     See Distances.jl for list of available metrics and the process of implementic your own metric. Once X is converted 
@@ -46,7 +50,7 @@ function dispersion(D,group)
     The function accepts:
         D: A dissimiarity or distance matrix
         group: A vector containing group labels
-        metric: A distance/dissimilarity measure implemented in Distances.jl
+        metric: (key word) boolean value specifying whether or not the distance used used metric
     
     This function returns a named tuple containing:
         F = Global F-Statistic 
@@ -63,25 +67,31 @@ function dispersion(D,group)
     levels = unique(group)
     # vegdist objects contain lower triangular matrices wheras D is symmetric
     # thus we skip a D + D' step here.
-    # We double center the matrix as in vegan.betadisper. Though this is not identical Anderson (2006).
-    A = dblcen(D .^2 ) 
-    e = eigen(Hermitian(-A/2))
-    vectors = e.vectors
-    eig = e.values 
-    # Anderson (2006) multiplies eigen vectors corresponding to negative eigen values by sqrt(-1).
-    # We ommit this step in keeping with vegan.betadisper
-    vectors = vectors * diagm(sqrt.(abs.(eig))) 
-    # record indices corresponding to postitive eigenvalues
-    pos = real.(eig) .> 0.0 
-    medians = spatialMed(vectors, group, pos)
-    # calculate distances (to median) for "pos" and "neg" vectors separately. in orer to 
-    # subtract "neg" from "pos". See Anderson (2006) for details.
-    dis_pos = [Resids(vectors[group .== unique(group)[i],pos], medians[1][i]) for i in 1:length(unique(group))]
-    dis_neg = [Resids(vectors[group .== unique(group)[i], .!pos], medians[2][i]) for i in 1:length(unique(group))]
-    # Where dis_neg > dis_pos, set residual = 0 by taking only the real part 
-    # of the square root of a negative. This was implemented in vegan.betadisper after discussion in
-    # issue #306. But this is not done in Anderson (2006)
-    residuals = [(real.(sqrt.(Complex.(dis_pos[i] .- dis_neg[i]))) )   for i in 1:length(dis_pos)] 
+    if !metric
+        # We double center the matrix as in vegan.betadisper. Though this is not identical Anderson (2006).
+        A = dblcen(D .^2 ) 
+        e = eigen(Hermitian(-A/2))
+        vectors = e.vectors
+        eig = e.values 
+        # Anderson (2006) multiplies eigen vectors corresponding to negative eigen values by sqrt(-1).
+        # We ommit this step in keeping with vegan.betadisper
+        vectors = vectors * diagm(sqrt.(abs.(eig))) 
+        # record indices corresponding to postitive eigenvalues
+        pos = real.(eig) .> 0.0 
+        medians = spatialMed(vectors, group, pos)
+        # calculate distances (to median) for "pos" and "neg" vectors separately. in orer to 
+        # subtract "neg" from "pos". See Anderson (2006) for details.
+        dis_pos = [Resids(vectors[group .== unique(group)[i],pos], medians[1][i]) for i in 1:length(unique(group))]
+        dis_neg = [Resids(vectors[group .== unique(group)[i], .!pos], medians[2][i]) for i in 1:length(unique(group))]
+        # Where dis_neg > dis_pos, set residual = 0 by taking only the real part 
+        # of the square root of a negative. This was implemented in vegan.betadisper after discussion in
+        # issue #306. But this is not done in Anderson (2006)
+        residuals = [(real.(sqrt.(Complex.(dis_pos[i] .- dis_neg[i]))) )   for i in 1:length(dis_pos)] 
+    else
+        medians = spatialMed(D, group)
+        residuals = [Resids(D[group .== unique(group)[i],:], medians[1][i]) for i in 1:length(unique(group))]
+    end
+
     F = f(residuals)
     F_pairs = f_pairs(residuals)
     means = NamedArray(mean.(residuals),string.(levels),"group")
@@ -89,7 +99,7 @@ function dispersion(D,group)
 end
 
 
-function dispersion(X,group, metric )
+function dispersion(X,group, distance = false,metric = false )
     """
         Quantify the dispersion around the group spatial median for each group in X, according to the given distance metric.
         See Distances.jl for list of available metrics and the process of implementic your own metric. Once X is converted 
@@ -100,9 +110,10 @@ function dispersion(X,group, metric )
         The function accepts:
             X: A numerical array
             group: A vector containing group labels
-            metric: A distance/dissimilarity measure implemented in Distances.jl
+            distance: A distance/dissimilarity measure implemented in Distances.jl
+            metric: (key word) boolean value specifying whether or not the distance used used metric
         
-        This function returns a named tuple containing:
+            This function returns a named tuple containing:
             F = Global F-Statistic 
             pairwise_F = pairwise F-statistics
             medians = spatial (aka geometric) median of each group in the transformed coordinates
@@ -114,6 +125,11 @@ function dispersion(X,group, metric )
         Anderson, M.J. (2006) Distance-based tests for homogeneity of multivariate dispersions. Biometrics 62(1), 245--253.
         https://github.com/vegandevs/vegan/blob/master/R/betadisper.R
     """
-    D = Distances.pairwise(metric(),X,X,dims = 1)
-    return dispersion(D,group)
+    if !metric
+        D = Distances.pairwise(distance(),X,X,dims = 1)
+        return dispersion(D,group)
+    else
+        dispersion(D,group, metric = true)
+    end
+
 end
