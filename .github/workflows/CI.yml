@@ -55,9 +55,9 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: DocMeta, doctest
-            using BetaDisp
-            DocMeta.setdocmeta!(BetaDisp, :DocTestSetup, :(using BetaDisp); recursive=true)
-            doctest(BetaDisp)'
+            using BetaDispersion
+            DocMeta.setdocmeta!(BetaDisp, :DocTestSetup, :(using BetaDispersion); recursive=true)
+            doctest(BetaDispersion)'
       - run: julia --project=docs docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
