@@ -8,9 +8,9 @@ version = "0.0.1"
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
-[[BetaDisp]]
+[[BetaDispersion]]
 path = ".."
-uuid = "7713d48a-e16c-416e-80cb-3757ad005515"
+uuid = "203aa2a0-0be6-11ec-2d81-e1345fdb5ee1"
 version = "0.1.0"
 
 [[Dates]]
