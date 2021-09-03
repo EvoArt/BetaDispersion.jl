@@ -2,7 +2,7 @@ using BetaDispersion, Distances, StatsBase,BenchmarkTools, RCall
 using Test
 R"library(vegan)"
 # Rcall uses a single thread, so make sure Julia is using only ine thread as well
-@testset "BetaDispersion.jl" begin
+
     #test against vegan on small data set
     x = rand(30,10) 
     y =rand(1:3,30)
@@ -45,4 +45,3 @@ R"library(vegan)"
    r = @benchmark R"permutest($dispr,pairwise = TRUE, permutations = 999)" #11.515 s
    @test mean(j.times) < mean(r.times)
 
-end
