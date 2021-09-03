@@ -3,7 +3,7 @@
 
 This is a small package aimed at providing equivalent functionality to `betadisper` in the R package `vegan`, namely multivariate test for homogeneity of variance (dispersion). This is often used in ecology to compare beta diversity between metacommunities. This analysis comes from work by [Marti Anderson (2006)](https://onlinelibrary.wiley.com/doi/10.1111/j.1541-0420.2005.00440.x). However, a number of tweaks have been made to the preferred way of performing the analysis since then. We aim to keep this package aligned with decisions made by [vegan devs](https://github.com/vegandevs/vegan/blob/master/R/betadisper.R). However, the current implementation only offers permutation tests for P-values, and only spatial medians (not centroids) are used. 
 
-<img src="https://github.com/EvoArt/BetaDispersion.jl/blob/master/docs/permutation.gif">
+<img src="https://github.com/EvoArt/BetaDispersion.jl/blob/master/docs/permutation.gif" width="500"/>
 
 Two functions are exported, `dispersion` takes either a data array (where each row is an observation), a vector containing group identities and a distance function type from `Distances.jl`, or a distance matrix and the grouping vector. Alternatively, if working with Euclidean distances, pass in the original data (where each row is an observation) instead of a distance matrix and set the key work argument `metric = true`. This function returns a `Disp` struct containing:
 *    `F` = Global F-Statistic 
