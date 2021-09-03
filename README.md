@@ -1,7 +1,7 @@
 # BetaDispersion
 
 
-This is a small package aimed at providing equivalent functionality to `betadisper` in the R package `vegan`, namely multivariate test for homogeneity of variance (dispersion). This is often used in ecology to compare beta diversity between metacommunities. This analysis comes from work by [Mari Anderson (2006)](https://onlinelibrary.wiley.com/doi/10.1111/j.1541-0420.2005.00440.x). However, a number of tweaks have been made to the preferred way of performing the analysis since then. We aim to keep this package aligned with decisions made by [vegan devs](https://github.com/vegandevs/vegan/blob/master/R/betadisper.R). However, the current implementation only offers permutation tests for P-values, and only spatial medians (not centroids) are used. 
+This is a small package aimed at providing equivalent functionality to `betadisper` in the R package `vegan`, namely multivariate test for homogeneity of variance (dispersion). This is often used in ecology to compare beta diversity between metacommunities. This analysis comes from work by [Marti Anderson (2006)](https://onlinelibrary.wiley.com/doi/10.1111/j.1541-0420.2005.00440.x). However, a number of tweaks have been made to the preferred way of performing the analysis since then. We aim to keep this package aligned with decisions made by [vegan devs](https://github.com/vegandevs/vegan/blob/master/R/betadisper.R). However, the current implementation only offers permutation tests for P-values, and only spatial medians (not centroids) are used. 
 
 <img src="https://github.com/EvoArt/BetaDispersion.jl/blob/master/docs/disp.svg">
 
@@ -20,7 +20,7 @@ Two functions are exported, `dispersion` takes either a data array (where each r
  *   `F` = Global F-Statistic 
  *   `pairwise_F` = pairwise F-statistics
 
-Additionally, If [Turing.jl](https://turing.ml/stable/) is loaded before BetaDisp you can call `bayesdisp` on the `Disp` returned by `dispersion` to perform Bayesian inference to estimate mean and standard deviation of the residuals of each group. By default 4 chains are run simultaneously using the No U-turns (NUTS) sampler for 1000 iterations each. The function returns the Markov chains along with diagnostics, more details can be found [here](https://turinglang.github.io/MCMCChains.jl/dev/). Check the [source code](https://github.com/EvoArt/BetaDispersion.jl/blob/master/src/Bayes.jl) to see the function arguments. If fine control over model implementation is required, the user is urged to construct their model directly in Turing.jl.
+Additionally, If [Turing.jl](https://turing.ml/stable/) is loaded before BetaDispersion you can call `bayesdisp` on the `Disp` returned by `dispersion` to perform Bayesian inference to estimate mean and standard deviation of the residuals of each group. By default 4 chains are run simultaneously using the No U-turns (NUTS) sampler for 1000 iterations each. The function returns the Markov chains along with diagnostics, more details can be found [here](https://turinglang.github.io/MCMCChains.jl/dev/). Check the [source code](https://github.com/EvoArt/BetaDispersion.jl/blob/master/src/Bayes.jl) to see the function arguments. If fine control over model implementation is required, the user is urged to construct their model directly in Turing.jl.
 
 ## Example usage
 
