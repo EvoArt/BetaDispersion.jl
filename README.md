@@ -6,7 +6,7 @@ This is a small package aimed at providing equivalent functionality to `betadisp
 The basic steps are to calculate spatial medians for groups of data points, calculate F-statistics (including those for each pairwise combination of groups), then permute the residuals (distances from medians) and re-calculate F for each permutation. The P-value is the proportion of permuted F values that 
 are greater than or or equal to the original F value.
 
-<img src="https://github.com/EvoArt/BetaDispersion.jl/blob/master/docs/permutation.gif" width="500"/>
+<img src="https://github.com/EvoArt/BetaDispersion.jl/blob/master/docs/permutation.gif"/>
 
 Two functions are exported, `dispersion` takes either a data array (where each row is an observation), a vector containing group identities and a distance function type from `Distances.jl`, or a distance matrix and the grouping vector. Alternatively, if working with Euclidean distances, pass in the original data (where each row is an observation) instead of a distance matrix and set the key work argument `metric = true`. This function returns a `Disp` struct containing:
 *    `F` = Global F-Statistic 
