@@ -35,11 +35,13 @@ function permutest(disp ::Disp,n_perm = 10000)
     X̅ = mean(X)
     k = length(R)
     # generate empty containers for F values
-    perm = Vector{Float64}(undef,n_perm)    
+    perm = Vector{Float64}(undef,n_perm)  
+    #rs = copy(R)#Vector{Vector}(undef,n)  
     # run permutation
     for p in 1:n_perm
         shuffle!(r)
         rs = [view(r,inds[i]) for i in 1:n]
+   
         perm[p] =f(rs,N,nj,X̅,k)
     end
     ppairs =zeros(k,k)
@@ -74,7 +76,7 @@ function permutest(r_1,r_2 ,F,n_perm = 1000)
     # run permutation
     for p in 1:n_perm
         shuffle!(r)
-        rs = [view(r,inds[i]) for i in 1:n]
+        rs = (view(r,inds[1]) ,view(r,inds[2]) )
         perm[p] =f(rs,N,nj,X̅,k)
     end  
     P = sum(perm .> F)/n_perm
