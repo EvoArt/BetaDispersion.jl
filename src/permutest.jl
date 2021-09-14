@@ -38,7 +38,7 @@ function permutest(disp ::Disp,n_perm = 10000)
     perm = Vector{Float64}(undef,n_perm)  
     #rs = copy(R)#Vector{Vector}(undef,n)  
     # run permutation
-    for p in 1:n_perm
+    @inbounds for p in 1:n_perm
         shuffle!(r)
         rs = [view(r,inds[i]) for i in 1:n]
    
@@ -74,7 +74,7 @@ function permutest(r_1,r_2 ,F,n_perm = 1000)
     # generate empty containers for F values
     perm = Vector{Float64}(undef,n_perm) 
     # run permutation
-    for p in 1:n_perm
+    @inbounds for p in 1:n_perm
         shuffle!(r)
         rs = (view(r,inds[1]) ,view(r,inds[2]) )
         perm[p] =f(rs,N,nj,X̅,k)
