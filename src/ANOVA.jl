@@ -12,10 +12,25 @@ function f(R)
     bottom = sum([sum((R[i] .- X̅j[i]) .^2) for i in 1:k])/(N-k)
     return top/bottom
 end
-function f(R,N,nj,X̅,k)
+function f_slow(R,N,nj,X̅,k)
     X̅j = mean.(R)
     top = sum(nj .*(X̅j .- X̅) .^2) /(k-1)
     bottom = sum([sum((R[i] .- X̅j[i]) .^2) for i in 1:k])/(N-k)
+    return top/bottom
+end
+
+function f(R,N,nj,X̅,k)
+    X̅j = mean.(R)
+    top = 0.0
+    bottom = 0.0
+    @inbounds for i in 1:k
+        top += nj[i] * (X̅j[i] - X̅)^2
+        for j in 1:nj[i]
+            bottom += (R[i][j] - X̅j[i])^2
+        end
+    end
+    top/= (k-1)
+    bottom /= (N-k)
     return top/bottom
 end
 
