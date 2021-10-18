@@ -8,6 +8,7 @@ struct Disp
     means ::Vector{Float64}
     group  ::Vector
     levels  ::Vector
+    group_residuals ::Vector
 end
 #Helper functions
 
@@ -78,6 +79,7 @@ function dispersion(D,group;metric = false)
         vectors = vectors * diagm(sqrt.(abs.(eig))) 
         # record indices corresponding to postitive eigenvalues
         pos = real.(eig) .> 0.0 
+        med = spatialMed(vectors,ones(size(vectors)[1]),pos)
         medians = spatialMed(vectors, group, pos)
         # calculate distances (to median) for "pos" and "neg" vectors separately. in orer to 
         # subtract "neg" from "pos". See Anderson (2006) for details.
@@ -87,15 +89,24 @@ function dispersion(D,group;metric = false)
         # of the square root of a negative. This was implemented in vegan.betadisper after discussion in
         # issue #306. But this is not done in Anderson (2006)
         residuals = [(real.(sqrt.(Complex.(dis_pos[i] .- dis_neg[i]))) )   for i in 1:length(dis_pos)] 
+        println(vcat(medians[1]...))
+        println(med[1][1])
+
+        group_dis_pos = Resids(vcat(medians[1]...), med[1][1]) 
+        group_dis_neg = Resids(vcat(medians[2]...), med[2][1])
+        group_residuals = [(real.(sqrt.(Complex.(group_dis_pos[i] .- group_dis_neg[i]))) )   for i in 1:length(group_dis_pos)] 
+
     else
         medians = spatialMed(D, group)
+        med = spatialMed(D,ones(size(D)[1]))
         residuals = [Resids(D[group .== levels[i],:], medians[i]) for i in 1:length(levels)]
+        group_residuals = vec(Resids(vcat(medians...), med[1])) 
     end
 
     F = f(residuals)
     F_pairs = f_pairs(residuals)
     means = NamedArray(mean.(residuals),string.(levels),"group")
-    return Disp(F, F_pairs, medians, residuals, means,group, levels)
+    return Disp(F, F_pairs, medians, residuals, means,group, levels,group_residuals)
 end
 
 
