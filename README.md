@@ -16,6 +16,7 @@ Two functions are exported, `dispersion` takes either a data array (where each r
 *    `means` = vector containing the means distance to median for each group
 *    `group` = the original grouping vector
 *    `levels` = unique items from 'group'
+*    `group_residuals` = vector containing each groups distance from the overall median
 
 `permutest` takes the named tuple returned by `dispersion` and returns a named tuple containing:
  *   `P` = Global P-value
