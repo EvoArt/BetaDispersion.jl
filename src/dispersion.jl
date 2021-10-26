@@ -89,8 +89,6 @@ function dispersion(D,group;metric = false)
         # of the square root of a negative. This was implemented in vegan.betadisper after discussion in
         # issue #306. But this is not done in Anderson (2006)
         residuals = [(real.(sqrt.(Complex.(dis_pos[i] .- dis_neg[i]))) )   for i in 1:length(dis_pos)] 
-        println(vcat(medians[1]...))
-        println(med[1][1])
 
         group_dis_pos = Resids(vcat(medians[1]...), med[1][1]) 
         group_dis_neg = Resids(vcat(medians[2]...), med[2][1])
