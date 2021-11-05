@@ -13,31 +13,31 @@ end
 #Helper functions
 
 # calculate distances from medians
-function Resids(x,c)
+function get_residuals(x,c)
     d = x .-c
     sum(d .^2,dims =2) 
 end
 
 # doube center matrix
-function dblcen(D)
+function double_center(D)
     A = D .- mean(D,dims = 1)
     return A .- mean(A,dims = 2) 
 end
 
 # calculate medians 
 # Get spatial median as a row vector
-spatial_median(X ::Array) = DirectionalStatistics.geometric_median([row for row in eachrow(X)])'
-#apply `spatial_median` function to get pos and neg median for each group
-function spatialMed(vectors, group, pos)
+geo_median(X ::Array) = DirectionalStatistics.geometric_median([row for row in eachrow(X)])'
+#apply `geo_median` function to get positive_inds and negative_inds median for each group
+function geo_median(pco_space, group, positive_inds)
 
-    spMedPos = [spatial_median(vectors[group .== g,pos]) for g in unique(group)]
-    spMedNeg = [spatial_median(vectors[group .== g, .!pos]) for g in unique(group)]
+    spMedPos = [geo_median(pco_space[group .== g,positive_inds]) for g in unique(group)]
+    spMedNeg = [geo_median(pco_space[group .== g, .!pos]) for g in unique(group)]
 
     return (spMedPos,spMedNeg )
 end
-function spatialMed(vectors, group)
+function geo_median(pco_space, group)
 
-    return [spatial_median(vectors[group .== g,:]) for g in unique(group)]
+    return [geo_median(pco_space[group .== g,:]) for g in unique(group)]
 end
 
 function dispersion(D,group;metric = false)
@@ -70,35 +70,33 @@ function dispersion(D,group;metric = false)
     # thus we skip a D + D' step here.
     if metric == false
         # We double center the matrix as in vegan.betadisper. Though this is not identical Anderson (2006).
-        A = dblcen(D .^2 ) 
-        e = eigen(Hermitian(-A/2))
-        vectors = e.vectors
-        eig = e.values 
+        A = double_center(D .^2 ) 
+        vals, vecs = eigen(Hermitian(-A/2))
         # Anderson (2006) multiplies eigen vectors corresponding to negative eigen values by sqrt(-1).
         # We ommit this step in keeping with vegan.betadisper
-        vectors = vectors * diagm(sqrt.(abs.(eig))) 
+        pco_space = vecs * diagm(sqrt.(abs.(vals))) 
         # record indices corresponding to postitive eigenvalues
-        pos = real.(eig) .> 0.0 
-        med = spatialMed(vectors,ones(size(vectors)[1]),pos)
-        medians = spatialMed(vectors, group, pos)
-        # calculate distances (to median) for "pos" and "neg" vectors separately. in orer to 
-        # subtract "neg" from "pos". See Anderson (2006) for details.
-        dis_pos = [Resids(vectors[group .== levels[i],pos], medians[1][i]) for i in 1:length(levels)]
-        dis_neg = [Resids(vectors[group .== levels[i], .!pos], medians[2][i]) for i in 1:length(levels)]
+        positive_inds = real.(vals) .> 0.0 
+        med = geo_median(pco_space,ones(size(pco_space)[1]),positive_inds)
+        medians = geo_median(pco_space, group, positive_inds)
+        # calculate distances (to median) for "positive_inds" and "negative_inds" vectors separately. in orer to 
+        # subtract "negative_inds" from "positive_inds". See Anderson (2006) for details.
+        dis_pos = [get_residuals(pco_space[group .== levels[i],positive_inds], medians[1][i]) for i in 1:length(levels)]
+        dis_neg = [get_residuals(pco_space[group .== levels[i], .!pos], medians[2][i]) for i in 1:length(levels)]
         # Where dis_neg > dis_pos, set residual = 0 by taking only the real part 
         # of the square root of a negative. This was implemented in vegan.betadisper after discussion in
         # issue #306. But this is not done in Anderson (2006)
         residuals = [(real.(sqrt.(Complex.(dis_pos[i] .- dis_neg[i]))) )   for i in 1:length(dis_pos)] 
 
-        group_dis_pos = Resids(vcat(medians[1]...), med[1][1]) 
-        group_dis_neg = Resids(vcat(medians[2]...), med[2][1])
+        group_dis_pos = get_residuals(vcat(medians[1]...), med[1][1]) 
+        group_dis_neg = get_residuals(vcat(medians[2]...), med[2][1])
         group_residuals = [(real.(sqrt.(Complex.(group_dis_pos[i] .- group_dis_neg[i]))) )   for i in 1:length(group_dis_pos)] 
 
     else
-        medians = spatialMed(D, group)
-        med = spatialMed(D,ones(size(D)[1]))
-        residuals = [Resids(D[group .== levels[i],:], medians[i]) for i in 1:length(levels)]
-        group_residuals = vec(Resids(vcat(medians...), med[1])) 
+        medians = geo_median(D, group)
+        med = geo_median(D,ones(size(D)[1]))
+        residuals = [get_residuals(D[group .== levels[i],:], medians[i]) for i in 1:length(levels)]
+        group_residuals = vec(get_residuals(vcat(medians...), med[1])) 
     end
 
     F = f(residuals)
