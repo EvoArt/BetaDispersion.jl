@@ -31,7 +31,7 @@ geo_median(X) = DirectionalStatistics.geometric_median([row for row in eachrow(X
 function geo_median(pco_space, group, positive_inds)
 
     spMedPos = [geo_median(pco_space[group .== g,positive_inds]) for g in unique(group)]
-    spMedNeg = [geo_median(pco_space[group .== g, .!pos]) for g in unique(group)]
+    spMedNeg = [geo_median(pco_space[group .== g, .!positive_inds]) for g in unique(group)]
 
     return (spMedPos,spMedNeg )
 end
