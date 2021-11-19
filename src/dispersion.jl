@@ -82,7 +82,7 @@ function dispersion(D,group;metric = false)
         # calculate distances (to median) for "positive_inds" and "negative_inds" vectors separately. in orer to 
         # subtract "negative_inds" from "positive_inds". See Anderson (2006) for details.
         dis_pos = [get_residuals(pco_space[group .== levels[i],positive_inds], medians[1][i]) for i in 1:length(levels)]
-        dis_neg = [get_residuals(pco_space[group .== levels[i], .!pos], medians[2][i]) for i in 1:length(levels)]
+        dis_neg = [get_residuals(pco_space[group .== levels[i], .!positive_inds], medians[2][i]) for i in 1:length(levels)]
         # Where dis_neg > dis_pos, set residual = 0 by taking only the real part 
         # of the square root of a negative. This was implemented in vegan.betadisper after discussion in
         # issue #306. But this is not done in Anderson (2006)
