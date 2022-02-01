@@ -26,7 +26,7 @@ end
 
 # calculate medians 
 # Get spatial median as a row vector
-geo_median(X) = DirectionalStatistics.geometric_median([row for row in eachrow(X)])'
+geo_median(X) = transpose(DirectionalStatistics.geometric_median([row for row in eachrow(X)]))
 #apply `geo_median` function to get positive_inds and negative_inds median for each group
 function geo_median(pco_space, group, positive_inds)
 
