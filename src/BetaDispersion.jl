@@ -1,13 +1,27 @@
+"""
+    BetaDispersion
+
+Multivariate homogeneity of group dispersions (Anderson 2006), as
+`vegan::betadisper`, with the permutation test of `vegan::permutest`.
+
+```julia
+bd = betadisper(D, group)             # D: a dissimilarity matrix
+permutest(bd; pairwise=true)
+```
+"""
 module BetaDispersion
 
-using LinearAlgebra,  Random, DirectionalStatistics, NamedArrays, Distances, Requires
-import StatsBase: mean
-include("ANOVA.jl")
-include("dispersion.jl")
-include("permutest.jl")
-function __init__()
-    @require Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0" include("Bayes.jl")
-end
+using LinearAlgebra, Random, Statistics
+using Distances: pairwise, PreMetric
+using Printf: @sprintf
+using StatsFuns: fdistccdf, tdistccdf
 
-export dispersion, permutest
+export betadisper, permutest, dispersion_anova, adjust_p, BetaDisper, DispersionTest
+export dispersion   # name used before 0.2
+
+include("median.jl")
+include("betadisper.jl")
+include("permutest.jl")
+include("show.jl")
+
 end
