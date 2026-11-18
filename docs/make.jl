@@ -16,8 +16,10 @@ makedocs(;
     pages=[
         "Home" => "index.md",
     ],
+    checkdocs=:exports,
 )
 
 deploydocs(;
     repo="github.com/EvoArt/BetaDispersion.jl",
+    devbranch="master",
 )

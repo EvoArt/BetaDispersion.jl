@@ -4,6 +4,7 @@
 /test/timings.jl
 /test/profiling.jl
 /Manifest.toml
+/docs/Manifest.toml
 /docs/build/
 
 # notes for/from coding assistants: never tracked

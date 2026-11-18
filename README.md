@@ -1,6 +1,5 @@
 # BetaDispersion
 
-[![Docs](https://img.shields.io/badge/docs-dev-blue.svg)](https://EvoArt.github.io/BetaDispersion.jl/dev)
 [![CI](https://github.com/EvoArt/BetaDispersion.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/EvoArt/BetaDispersion.jl/actions/workflows/CI.yml)
 
 Multivariate homogeneity of group dispersions (Anderson 2006), as
