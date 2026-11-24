@@ -96,5 +96,31 @@ sumdist(P, y) = sum(norm(P[i, :] .- y) for i in axes(P, 1))
         @test adjust_p(p, :holm) ≈ [0.04, 0.09, 0.09, 0.2]
         @test adjust_p(p, :bh) ≈ [0.04, 0.16 / 3, 0.16 / 3, 0.2]
         @test adjust_p(p, :bonferroni) ≈ [0.04, 0.16, 0.12, 0.8]
+        @test adjust_p(p, :none) == p
+        @test_throws ArgumentError adjust_p(p, :fdr)
+    end
+
+    @testset "edge cases and displays" begin
+        # Weiszfeld iterate starts on a data point that is not the median
+        P = [0.0 0.0; 0.0 1.0; 0.0 -1.0; 3.0 0.0; 3.0 0.5]
+        y = spatial_median(P)
+        @test norm(y) > 0.1
+        rng = StableRNG(7)
+        for _ in 1:50
+            @test sumdist(P, y) <= sumdist(P, y .+ 1e-4 .* randn(rng, 2)) + 1e-12
+        end
+        # strongly non-Euclidean dissimilarities: negative squared distances
+        D = [0.0 0.381 0.906 0.496 0.316 0.045; 0.381 0.0 0.001 0.019 1.254 0.077;
+             0.906 0.001 0.0 0.816 0.25 0.082; 0.496 0.019 0.816 0.0 1.136 0.046;
+             0.316 1.254 0.25 1.136 0.0 0.963; 0.045 0.077 0.082 0.046 0.963 0.0]
+        bd = @test_logs (:warn, r"negative") match_mode = :any betadisper(D, [1, 1, 1, 2, 2, 2])
+        @test all(>=(0), bd.distances)
+        @test_throws ArgumentError betadisper(D, [1, 1, 1, 2, 2, 2]; add=:other)
+        @test_throws ArgumentError betadisper(D, [1, 1, 1, 2, 2, 2]; type=:mean)
+        # compact displays
+        @test sprint(show, bd) == "BetaDisper(6 observations, 2 groups)"
+        t = permutest(bd; permutations=9, rng=StableRNG(8))
+        @test startswith(sprint(show, t), "DispersionTest(F = ")
+        @test occursin("centroid", sprint(show, MIME("text/plain"), betadisper(D, [1, 1, 1, 2, 2, 2]; type=:centroid)))
     end
 end
